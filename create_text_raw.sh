@@ -251,3 +251,30 @@ scp  -P 54322  mia23@iutdev.univ-avignon.fr:mmlamah/judilibre_json_data.sql ./ju
 scp -r mia2307@iutdev.univ-avignon.fr:judilibre_json ./judilibre_json/
 
 scp  -P 54322  mia23@iutdev.univ-avignon.fr:judilibre_v_schema.sql ./judilibre_v/schema.sql
+
+scp mia2307@iutdev.univ-avignon.fr:judilibre_json ./judilibre_json/
+
+
+counter=1
+line_count=$(wc -l < judilibre_json/all_ids.tsv)
+while IFS=$'\t' read -r id; do
+    awk -F'\t' '$1 == "$id" {print $2}' judilibre_json/judilibre_json.tsv > "judilibre_json/data/${id}.tsv"
+    echo "[${counter} / ${line_count}] done"
+    counter=$((counter + 1))
+done < judilibre_json/judilibre_json.tsv
+
+
+counter=1
+line_count=$(wc -l < all_ids.tsv)
+while IFS=$'\t' read -r id; do
+    psql -d juripredis -c "COPY (select json_array_elements_text(json->'raw_text') from judilibre_json where json->>'id' = '${id}') TO STDOUT" > "judilibre_json/${id}.tsv"
+    echo "[${counter} / ${line_count}] done"
+    counter=$((counter + 1))
+done < all_ids.tsv
+
+scp  -P 54322  ./judilibre_json/all_ids.tsv mia23@iutdev.univ-avignon.fr:./
+
+wc -l < judilibre_json/all_ids.tsv
+ls -1 judilibre_json/ | wc -l
+
+ls -1 judilibre_json/ | wc -l
