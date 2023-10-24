@@ -4,7 +4,7 @@
 #SBATCH --time=0-00:00
 #SBATCH --output=segment_text_output.log
 #SBATCH --error=segment_text_error.log
-#SBATCH --mail-type=BEGIN, END
+#SBATCH --mail-type=BEGIN,END
 #SBATCH --mail-user=lamahmichelmarie@gmail.com
 
 
