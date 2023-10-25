@@ -20,25 +20,27 @@ def split_text_into_passages(text, tokenizer, prev_include=2):
     passage_ends = []
     lines = text.splitlines()
 
+    current_passage_tokens = []
     for i, line in enumerate(lines):
         words = line.split()
         for j, word in enumerate(words):
-            word_tokens = tokenizer.tokenize(word)
-            current_passage_tokens = tokenizer.tokenize(" ".join(current_passage))
+            word_tokens = tokenizer.encode(word)
             if len(current_passage_tokens) + len(word_tokens) <= tokenizer.model_max_length:
                 current_passage.append(word)
+                current_passage_tokens.extend(word_tokens)
             else:
                 passages.append(" ".join(current_passage))
                 passage_ends.append(i + 1)
                 old_current_passage = current_passage
                 current_passage = [word]
+                current_passage_tokens = word_tokens
                 if prev_include > 0:
                     for z in range(prev_include):
-                        cpt = tokenizer.tokenize(" ".join(current_passage))
                         token_to_add = old_current_passage[-1 * (z + 1)]
-                        wt = tokenizer.tokenize(token_to_add)
-                        if len(cpt) + len(wt) <= tokenizer.model_max_length:
+                        wt = tokenizer.encode(token_to_add)
+                        if len(current_passage_tokens) + len(wt) <= tokenizer.model_max_length:
                             current_passage = [token_to_add] + current_passage
+                            current_passage_tokens = wt + current_passage_tokens
                         else:
                             break
 
