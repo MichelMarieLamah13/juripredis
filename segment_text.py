@@ -6,15 +6,16 @@ from tqdm import tqdm
 from transformers import AutoTokenizer
 
 
-def split_text_into_passages(text, tokenizer, prev_include=2):
+def split_text_into_passages(filename, tokenizer, prev_include=2):
     """
     Split text into passage with maximum number of char per passage and number of char of the previous
     passage to include in the following
-    :param text:  string the text to split
+    :param filename:  the name of the file
     :param tokenizer: tokenizer utilise
     :param prev_include: int number of char of the previous to include in the following
     :return:
     """
+    text = read_file(filename)
     passages = []
     current_passage = []
     passage_ends = []
@@ -25,6 +26,11 @@ def split_text_into_passages(text, tokenizer, prev_include=2):
         words = line.split()
         for j, word in enumerate(words):
             word_tokens = tokenizer.encode(word)
+            if len(word_tokens) > tokenizer.model_max_length:
+                print(f"Filename: {filename}")
+                print(f"Word: {word}")
+                print(f"Tokens code: {word_tokens}")
+                print(f"Tokens: {tokenizer.tokenize(word)}")
             if len(current_passage_tokens) + len(word_tokens) <= tokenizer.model_max_length:
                 current_passage.append(word)
                 current_passage_tokens.extend(word_tokens)
@@ -38,6 +44,13 @@ def split_text_into_passages(text, tokenizer, prev_include=2):
                     for z in range(prev_include):
                         token_to_add = old_current_passage[-1 * (z + 1)]
                         wt = tokenizer.encode(token_to_add)
+                        if len(wt) > tokenizer.model_max_length:
+                            print(f"Filename: {filename}")
+                            print(f"Word: {token_to_add}")
+                            print(f"Tokens code: {wt}")
+                            print(f"Tokens: {tokenizer.tokenize(token_to_add)}")
+                        if len(word_tokens) > tokenizer.model_max_length:
+                            print(f"Filename: {filename}")
                         if len(current_passage_tokens) + len(wt) <= tokenizer.model_max_length:
                             current_passage = [token_to_add] + current_passage
                             current_passage_tokens = wt + current_passage_tokens
@@ -83,8 +96,7 @@ def generate_passages(tokenizer, prev_include=2):
 
     for filename in tqdm(all_tsv_files, total=len(all_tsv_files), desc="Generating Passages", unit=" file"):
         id_dec, _ = os.path.splitext(filename)
-        text = read_file(filename)
-        df = split_text_into_passages(text, tokenizer, prev_include)
+        df = split_text_into_passages(filename, tokenizer, prev_include)
         n_rows, _ = df.shape
         df.insert(0, 'id_dec', [id_dec] * n_rows)
         all_dfs.append(df)
