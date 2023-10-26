@@ -13,13 +13,13 @@ def generate_embeddings(df, model, tokenizer):
         embedding = get_embeddings(chunk, model, tokenizer)
         embeddings.append(embedding)
     df['embedding'] = embeddings
-    df.to_csv(f'judilibre_v/embeddings.tsv', index=False)
+    df.to_csv(f'judilibre_v/judilibre_v_embeddings.tsv', index=False)
     return df
 
 
 if __name__ == "__main__":
     tokenizer = AutoTokenizer.from_pretrained('antoinelouis/biencoder-mMiniLMv2-L12-mmarcoFR')
     model = AutoModel.from_pretrained('antoinelouis/biencoder-mMiniLMv2-L12-mmarcoFR')
-    df_passages = pd.read_csv('judilibre_v/passages.tsv')
+    df_passages = pd.read_csv('judilibre_v/judilibre_v_passages.tsv')
 
     df_embeddings = generate_embeddings(df_passages, model, tokenizer)

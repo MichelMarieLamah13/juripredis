@@ -4,7 +4,8 @@
 #SBATCH --time=0-00:00
 #SBATCH --output=add_embeddings_output.log
 #SBATCH --error=add_embeddings_error.log
-#SBATCH --cpus-per-task=5
+#SBATCH --cpus-per-task=30
+#SBATCH --mem=30G
 #SBATCH --mail-type=BEGIN,END
 #SBATCH --mail-user=lamahmichelmarie@gmail.com
 
