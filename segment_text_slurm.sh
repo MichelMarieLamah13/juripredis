@@ -4,7 +4,8 @@
 #SBATCH --time=0-00:00
 #SBATCH --output=segment_text_output.log
 #SBATCH --error=segment_text_error.log
-#SBATCH --cpus-per-task=5
+#SBATCH --cpus-per-task=10
+#SBATCH --mem=16G
 #SBATCH --mail-type=BEGIN,END
 #SBATCH --mail-user=lamahmichelmarie@gmail.com
 
