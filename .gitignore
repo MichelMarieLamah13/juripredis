@@ -1,5 +1,6 @@
 judilibre_json/*
 judilibre_v/*
 segment_text_results/
+add_embedding_results/
 venv/*
 25_text_raw.sh
