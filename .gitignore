@@ -9,3 +9,5 @@ __pycache__/
 add_embedding_results/
 venv/*
 25_text_raw.sh
+.idea/
+.DS_STORE
