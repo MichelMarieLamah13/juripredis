@@ -12,14 +12,14 @@ from model import get_embeddings
 
 
 def generate_embeddings(df, model, tokenizer, start, end):
-    df = df[start:end]
+    df = df[start:end].reset_index(drop=True)
     n_rows = len(df)
     embeddings = []
     beginning = time.time()
     start_time = beginning
     updated_interval = 3600
 
-    print(f"Generating embedings for each passage: ")
+    print(f"Generating embedings for each passage: {start} - {end - 1}")
     sys.stdout.flush()
     for i, row in df.iterrows():
         chunk = row['passage']
@@ -29,12 +29,13 @@ def generate_embeddings(df, model, tokenizer, start, end):
         elapsed_time = current_time - start_time
         if (elapsed_time >= updated_interval) or i in [0, n_rows - 1]:
             duration = current_time - beginning
-            print(f"\t [{i + 1} / {n_rows}] = {round((i + 1) * 100 / n_rows)} % => {get_human_readable(duration)}")
+            print(
+                f"\t [{i + 1} / {n_rows}] = {round((i + 1) * 100 / n_rows)} % => {get_human_readable(duration)}")
             sys.stdout.flush()
             time.sleep(60)  # Sleep for 60 s after each hour
             start_time = time.time()
     df['embedding'] = embeddings
-    df.to_csv(f'judilibre_v/judilibre_v_embeddings_{start}_{end-1}.tsv', index=False)
+    df.to_csv(f'judilibre_v/judilibre_v_embeddings_{start}_{end - 1}.tsv', index=False)
 
     return df
 
