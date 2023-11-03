@@ -24,15 +24,17 @@ def generate_embeddings(df, model, tokenizer):
     updated_interval = 3600
 
     print(f"Generating embedings for each passage: ")
+    sys.stdout.flush()
     for i, row in df.iterrows():
         chunk = row['passage']
         embedding = get_embeddings(chunk, model, tokenizer)
         embeddings.append(embedding)
         current_time = time.time()
         elapsed_time = current_time - start_time
-        if (elapsed_time >= updated_interval) or i == 0:
+        if (elapsed_time >= updated_interval) or i in [0, n_rows - 1]:
             duration = current_time - beginning
-            print(f"\t [{i + 1} / {n_rows}] = {round((i + 1) / n_rows)} % => {get_human_readable(duration)}")
+            print(f"\t [{i + 1} / {n_rows}] = {round((i + 1)*100 / n_rows)} % => {get_human_readable(duration)}")
+            sys.stdout.flush()
             time.sleep(60)  # Sleep for 60 s after each hour
             start_time = time.time()
     df['embedding'] = embeddings
