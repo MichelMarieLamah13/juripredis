@@ -19,8 +19,10 @@ conda activate rcc
 # judilibre_v_embeddings_7803160_8778554.tsv judilibre_v_embeddings_8778555_9753949.tsv \
 # > judilibre_v/judilibre_v_data.csv
 
-awk 'BEGIN {FS=OFS=","} NR==1 {$2="chunk"} {print}' \
-judilibre_v/judilibre_v_data.csv > judilibre_v/judilibre_v_data_new.csv
+# awk 'BEGIN {FS=OFS=","} NR==1 {$2="chunk"} {print}' \
+# judilibre_v/judilibre_v_data.csv > judilibre_v/judilibre_v_data_new.csv
+
+scp  judilibre_v/judilibre_v_data.csv -P 54322  mia23@iutdev.univ-avignon.fr:mia2307/
 
 
 conda deactivate
