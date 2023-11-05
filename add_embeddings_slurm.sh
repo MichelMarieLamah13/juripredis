@@ -5,8 +5,8 @@
 #SBATCH --output=add_embeddings_output_%A_%a.log
 #SBATCH --error=add_embeddings_error_%A_%a.log
 #SBATCH --cpus-per-task=5
-#SBATCH --mem=32G
-#SBATCH --array=1-2
+#SBATCH --mem=64G
+#SBATCH --array=8-10
 
 source /etc/profile.d/conda.sh
 conda activate rcc
