@@ -44,7 +44,7 @@ def embed():
     with torch.no_grad():
         embedding = get_embeddings(inputs, model, tokenizer)
 
-    return jsonify(embedding.tolist())
+    return jsonify(embedding)
 
 
 if __name__ == '__main__':
