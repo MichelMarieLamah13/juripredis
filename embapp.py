@@ -40,9 +40,8 @@ def get_embeddings(chunck, model, tokenizer):
 def embed():
     chunk = request.args.get('data')
     # Generate embeddings
-    inputs = tokenizer(chunk, return_tensors="pt")
     with torch.no_grad():
-        embedding = get_embeddings(inputs, model, tokenizer)
+        embedding = get_embeddings(chunk, model, tokenizer)
 
     return jsonify(embedding)
 
