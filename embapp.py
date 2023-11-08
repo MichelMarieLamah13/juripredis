@@ -36,7 +36,7 @@ def get_embeddings(chunck, model, tokenizer):
     return chunk_embeddings.view(-1).numpy().tolist()
 
 
-@app.route('/embed', methods=['GET'])
+@app.route('/embed_new', methods=['GET'])
 def embed():
     chunk = request.args.get('data')
     # Generate embeddings
@@ -47,4 +47,5 @@ def embed():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=56000)
+    # app.run(host='0.0.0.0', port=56000)
+    app.run(host='0.0.0.0', port=56002)
